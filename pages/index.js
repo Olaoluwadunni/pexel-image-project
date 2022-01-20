@@ -4,6 +4,9 @@ import styles from '../styles/Home.module.css';
 import axios from 'axios';
 import { SearchInput } from 'evergreen-ui';
 import { getSearch } from '../services/api';
+import Link from 'next/link'
+import Cookie from 'js-cookie'
+
 
 export default function Home() {
   const [images, setImages] = useState();
@@ -12,6 +15,23 @@ export default function Home() {
     .then((res) => setImages(res?.data))
     .catch((err) => console.log(JSON.stringify(err)))
   }
+  console.log(images)
+  
+  const handleClick = async(image) => {
+        const newImage = [image]
+        // console.log(image.alt)
+
+        Cookie.set('imageInfo', {image : {
+            id: image.id,
+            alt: image.alt,
+            color: image.avg_color,
+            url: image.url,
+            photographer: image.photographer,
+            src: image.src.tiny
+        }})
+        // localStorage.setItem('imageInfo', JSON.stringify(newImage))
+        console.log(image.alt, '---item')
+    }
   return (
     <div className={styles.container}>
       <Head>
@@ -21,21 +41,25 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <p>This is index page</p>
+        <h3>Pexel Image Project</h3>
         <SearchInput
           placeholder='search'
           onChange={(e) => handleSearch(e.target.value)} 
         />
         
-        <div style={{display: 'flex', flexWrap: 'wrap', flexDirection: "row", marginTop: "2em", width: "100%"}}>
-          {images?.photos?.map((image) => (
-          
-            <img style={{width: "20%", marginBottom: '30px', marginRight: '30px'}} src={image.src.tiny} alt={image.alt} />
- 
+        <div style={{display: 'flex', flexWrap: 'wrap', flexDirection: "row", justifyContent: 'center', alignContent: 'center', marginTop: "2em", width: "100%"}}>
+          {images?.photos?.map((image, index) => (
+            <Link href='/about' key={index} >
+              <a style={{width: '20%', marginBottom: '30px', marginRight: '30px'}} className={styles.card}>
+                <img 
+                  src={image.src.tiny}
+                  alt={image.alt}
+                  onClick={() => handleClick(image)}
+                />
+              </a>
+            </Link>
         ))}   
         </div>
-
-          
       </main>
 
       <footer className={styles.footer}>
