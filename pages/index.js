@@ -1,4 +1,5 @@
 import Head from 'next/head';
+// import Image from 'next/image'
 import { useState } from 'react';
 import styles from '../styles/Home.module.css';
 import axios from 'axios';
@@ -25,9 +26,9 @@ export default function Home() {
             id: image.id,
             alt: image.alt,
             color: image.avg_color,
-            url: image.url,
+            imageUrl: image.url,
             photographer: image.photographer,
-            src: image.src.tiny
+            imageSrc: image.src.tiny
         }})
         // localStorage.setItem('imageInfo', JSON.stringify(newImage))
         console.log(image.alt, '---item')
@@ -51,10 +52,12 @@ export default function Home() {
           {images?.photos?.map((image, index) => (
             <Link href='/about' key={index} >
               <a style={{width: '20%', marginBottom: '30px', marginRight: '30px'}} className={styles.card}>
-                <img 
+                <img
                   src={image.src.tiny}
                   alt={image.alt}
                   onClick={() => handleClick(image)}
+                  width="100%"
+                  height="100%"
                 />
               </a>
             </Link>
